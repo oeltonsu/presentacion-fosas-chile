@@ -1,0 +1,138 @@
+---
+title: "presentacion-fosas-chile"
+author: "Jorge Ruiz"
+date: "10/15/2020"
+output: beamer_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, 
+                      message = FALSE,
+                      warning = FALSE,
+                      cache = FALSE)
+```
+
+
+
+
+
+
+--- 
+
+TÍTULO
+
+# Estructura de la presentación
+
+-   Contexto
+-   ¿Por qué estamos haciendo esto?
+-   ¿Cómo funciona el modelo?
+-   Detalles técnicos
+-   Resultados (el uso del machine learning para DDHH)
+-   Impacto
+-   Siguientes pasos
+
+# Contexto
+
+México está atravesando por una crisis de derechos humanos, como consecuencia del uso de las fuerzas armadas para llevar acabo labores de seguridad pública.
+
+-   Sexenio de Felipe Calderón Hinojosa (2006-12)
+-   Sexenio de Enrique Peña Nieto (2012-18)
+-   Sexenio de Andrés Manuel López Obrador (2018-presente)
+
+# Desapariciones generalizadas
+
+Comité CED de Naciones Unidas: "El Comité lamenta profundamente que se mantiene una situación de desapariciones generalizadas en gran parte del territorio del Estado parte y que imperen la impunidad y la revictimización" (CED/C/MEX/CO/1 parr.10).
+
+En la actualidad, en México hay **77 mil 375 personas desaparecidas.**
+
+Más del 95% de los casos son posteriores a 2007.
+
+# ¿Por qué estamos haciendo esto?
+
+El objetivo de este proyecto es el de identificar municipios en México que tienen puntajes altos de tener fosas clandestinas que aún no han sido localizadas/observadas por fuentes como la prensa o por fuentes oficiales. 
+
+Queremos que sea una herramienta para apoyar las labores de búsqueda de personas desaparecidas de autoridades federales y estatales, así como de fortalecer los procesos de incidencia de colectivas de familiares en búsqueda en diferentes entidades de México. 
+
+Responde a la pregunta sobre ¿dónde buscar? 
+
+# ¿Cómo funciona el modelo?
+
+Comenzamos con la premisa de que las fosas que han sido observadas en el país son solo una fracción del universo de fosas clandestinas. 
+
+Por lo tanto, nuestro modelo identifica municipios que tienen un puntaje alto(similar a una probabilidad) de tener **fosas clandestinas que aún no han sido observadas**, dado que tienen características similares a los municipios que ya tuvieron observaciones. 
+
+Nuestro modelo utiliza hallazgos reportados por prensa escrita y de las fiscalías o procuradurías de las 32 entidades del país (utilizamos datos de 2009 a 2018)
+
+
+# ¿Cómo funciona el modelo?
+
+En México tenemos 2 mil 458 municipios 
+
+Dividimos los municipios en tres categorías conforme a la variable dependiente: 
+
+**1** a los municipios que tuvieron observaciones de fosas por alguna de las fuentes entre 2009 y 2018.
+
+**0** a los municipios donde creemos que tienen una probabilidad baja de tener fosas clandestinas por sus características geográficas, demográficas, entre otras.  
+
+**-1** a los municipios donde no conocemos la respuesta. _Estos son los que nos interesan_. 
+
+
+# ¿Cómo funciona el modelo?
+GRÁFICAS DE PREDICTORS 
+
+
+# Detalles técnicos
+
+Mantenemos dos listas separadas dependiendo la fuente. Esto nos ayuda a conocer los patrones de documentación de los hallazgos. 
+
+Entrenamos el modelo con 2/3 de los datos y después evaluamos su rendimiento con el resto de la información. 
+
+¿Qué hacemos con los missing values? 
+
+
+## Sesgos de los datos 
+SCATTER DE AMBAS FUENTES 
+
+
+# Resultados (el uso del machine learning para DDHH)
+MAPA INTERACTIVO 
+
+
+# Resultados (el uso del machine learning para DDHH)
+
+SCATTER COMPARANDO OBSERVACIONES EN 2009 Y EN 2018 
+
+# Resultados (el uso del machine learning para DDHH)
+FIEBRES 
+
+
+# Impacto
+
+Nuestros resultados han sido utilizados por colectivos de familiares con personas desaparecidas en estados como Chihuahua, Nuevo León y Guanajuato. 
+
+Se han preparado reportes para la Fiscalía General del Estado de Jalisco y para la Fiscalía General del Estado de Veracruz, así como al Equipo Argentino de Antropología Forense (EAAF).
+
+Buscamos que sirva para la implementación de programas contemplados en la _Ley General en Materia de Desaparición Forzada y Desaparición Cometida por Particulares_ :
+
+- La ley contempla la creación de un Sistema Nacional de Búsqueda 
+- Asistencia para la implementación del Programa Nacional de Exhumaciones
+
+
+# Siguientes pasos 
+
+- Obtener más datos de fosas y más datos para nuestros predictores 
+- Trabajar en los 0s del modelo 
+- Mejor la escala de las predicciones del modelo 
+
+
+--- 
+
+¡Muchas gracias por su atención!
+
+presentación disponible en: 
+
+
+
+<!-- done -->
+
+

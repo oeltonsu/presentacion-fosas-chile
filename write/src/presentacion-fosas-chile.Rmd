@@ -1,0 +1,193 @@
+---
+title: "Usar datos para desenterrar tragedias"
+subtitle: "El caso de las fosas clandestinas en México"
+author: |
+  Jorge Ruiz - PDH, Universidad Iberoamericana    
+  Oscar Elton - Data Cívica
+date: "21 de octubre de 2020"
+output: 
+  beamer_presentation:
+    colortheme: "whale"
+    latex_engine: xelatex
+    includes:
+      in_header: header.tex
+urlcolor: blue
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, 
+                      message = FALSE,
+                      warning = FALSE,
+                      cache = FALSE
+                      )
+```
+
+```{r, echo=FALSE, include=FALSE, warning=FALSE, comment=FALSE}
+if(!require(pacman))install.packages("pacman")
+pacman::p_load(tidyverse, kableExtra, tufte, png, grid, gridExtra, gganimate, here)
+```
+
+--- 
+
+# Primero que nada, un poco de contexto
+
+México está atravesando por una crisis de derechos humanos, como consecuencia del uso de las fuerzas armadas para llevar acabo labores de seguridad pública.
+
+* Sexenio de Felipe Calderón Hinojosa (2006 - 2012)
+* Sexenio de Enrique Peña Nieto (2012 - 2018)
+* Sexenio de Andrés Manuel López Obrador (2018 - presente)
+
+# Desapariciones generalizadas
+
+ > "El Comité lamenta profundamente que se mantiene una situación de desapariciones generalizadas en gran parte del territorio del Estado parte y que imperen la impunidad y la revictimización"
+ `r tufte::quote_footer('CED/C/MEX/CO/1 parr.10, Comité CED de Naciones Unidas')`
+
+Según los datos oficiales, actualmente en México hay **77 mil 375 personas desaparecidas**
+
+Más del 95% de los casos son posteriores a 2007.
+
+# ¿Por qué estamos haciendo esto?
+
+Queremos responder una pregunta: **¿dónde buscar?**
+
+En México, quienes buscan a las personas desaparecidas sus mismos familiares.
+
+Creemos que esta herramienta puede fortalecer los procesos de incidencia de colectivas de familiares en búsqueda en diferentes entidades de México, así como apoyar las labores de búsqueda de personas desaparecidas de autoridades federales y estatales.
+
+
+# ¿Cómo funciona el modelo?
+
+Partimos de la premisa de que las fosas que han sido observadas en el país son solo una fracción del universo de fosas clandestinas (porque además se encuentran fosas casi a diario).
+
+¿Podemos encontrar el resto? ¿Conocer el universo entero de fosas en México?
+
+No sabemos, pero esto es un pasito más para acercarnos a él. Queremos, a grandes razgos, clasificar nuestros municipios en municipios donde puede haber fosas clandestinas y municipios donde no.
+
+# ¿Cómo funciona el modelo?
+
+Utilizamos un modelo conocido en jerga de _machine learning_ como _random forest_.
+
+Este modelo tiene muchas ventajas:
+
+* Es MUY sencillo.
+* No es muy sensible a _missing values_ (valores perdidos/datos incompletos).
+* Nos ayuda a evitar de mejor manera el _overfitting_ que otros modelos.
+* Se puede utilizar tanto para regresiones como clasificaciones, __nosotros queremos lo segundo__
+
+# ¿Cómo funciona el modelo?
+Un pasito atrás... ¿Cómo funciona un _random forest_? Suponemos que han visto todos alguna vez una de estas cosas
+
+```{r , echo=FALSE, out.width = '80%', fig.align='center'}
+knitr::include_graphics(here("write/input/arbol-decision.png"))
+```
+
+# ¿Cómo funciona el modelo?
+Bien, pues el un _random forest_ no es más que la combinación de un montón de árboles de decisión
+
+```{r , echo=FALSE, out.width = '100%', fig.align='center'}
+knitr::include_graphics(here("write/input/random-forest.png"))
+```
+
+# Regresando a las fosas en México
+Datos generales:
+
+* **2 mil 458 municipios.** 
+* Hasta ahora tenemos datos de 2009 a 2018
+* 56 variables predictoras: sociodemográficos, características físicas y topográficas, infraestructura, y algunas cosas de violencia, pero tratamos en realidad de evitarlas
+* Tenemos en total entonces estimaciones realizadas con 20 modelos: __10__ años * __2__ fuentes 
+
+# ¿Cómo funciona el modelo?
+El primer paso, a manita clasificamos los municipios en tres categorías conforme a la variable dependiente: 
+
+**1** = municipios que tuvieron observaciones de fosas por alguna de las fuentes entre 2009 y 2018.
+
+**0** = municipios donde -dado un anaísis de contexto- consideramos poco posibleque existan fosas clandestinas.
+
+**-1** = municipios donde no conocemos la respuesta. _Estos son los que nos interesan_.
+
+# ¿Cómo funciona el modelo?
+Entrenamos los modelos con 2/3 de los municipios y después evaluamos su rendimiento con el resto de la información.
+
+__Entrenamos__ = __Estimamos__
+
+El modelo _"aprende"_ las características de los municipios con fosas y los que nosotros clasificamos como "sin" fosas. 
+
+Dadas esas características, los árboles votan.
+
+OJO: vamos a identificar sólo fosas con las características de las fosas que _ya han sido observadas antes_.
+
+# ¿Y los sesgos?
+WARNING: usar datos != ser objetivos
+
+Los procesos de generación de datos importan mucho.
+
+```{r , echo=FALSE, out.width = '40%', fig.align='center'}
+knitr::include_graphics(here("write/input/garbage.jpg"))
+```
+
+# ¿Cómo funciona el modelo?
+Primer paso de validación... todo se ve más o menos bien
+
+```{r , echo=FALSE, out.width = '45%'}
+ests <- list.files(here("write/input/"), pattern = "ests-", full.names = TRUE)
+knitr::include_graphics(ests)
+```
+
+# ¿Cómo se ven los resultados?
+Por eso usamos dos fuentes: fiscalías y prensa.
+
+Cada una tiene distintos sesgos potenciales, pero en lo general coinciden en las estimaciones.
+
+```{r , echo=FALSE, out.width = '45%'}
+scatters <- list.files(here("write/input/"), pattern = "compare-", full.names = TRUE)
+knitr::include_graphics(scatters)
+```
+
+# ¿Cómo se ven los resultados?
+Podemos ver también que la distribución geográfica de probabilidades es similar para ambas.
+
+```{r , echo=FALSE, out.width = '85%', fig.align='center'}
+knitr::include_graphics(here("write/input/predprob-2018.png"))
+```
+
+# ¿Y son consistentes en el tiempo?
+De lo que hemos visto hasta ahora, en realidad son bastante consistentes.
+
+```{r , echo=FALSE, out.width = '90%', fig.align='center'}
+knitr::include_graphics(here("write/input/fiebre-scores-fosas.png"))
+```
+
+# ¿Y son consistentes con la realidad?
+
+```{r , echo=FALSE, out.width = '45%'}
+notas <- list.files(here("write/input/"), pattern = "nota-", full.names = TRUE)
+knitr::include_graphics(notas)
+```
+
+# ¿Ha servido de algo?
+
+Nuestros resultados han sido utilizados por colectivos de familiares con personas desaparecidas en estados como Chihuahua, Nuevo León y Guanajuato. 
+
+Se han preparado reportes para la Fiscalía General de la República, Fiscalía General del Estado de Jalisco y para la Fiscalía General del Estado de Veracruz, así como al Equipo Argentino de Antropología Forense (EAAF).
+
+Buscamos que sirva para la implementación de programas contemplados en la _Ley General en Materia de Desaparición Forzada y Desaparición Cometida por Particulares_ :
+
+* La ley contempla la creación de un Sistema Nacional de Búsqueda 
+* Asistencia para la implementación del Programa Nacional de Exhumaciones
+
+# Siguientes pasos 
+
+- Obtener más datos de fosas y más datos para nuestros predictores. 
+- Trabajar en los _ceros_ del modelo. 
+- Mejor la desagregación geográfica de las predicciones del modelo. 
+
+--- 
+
+¡Muchas gracias por su atención!
+
+Presentación disponible en: https://github.com/oeltonsu/presentacion-fosas-chile.git
+
+* Jorge Ruiz: @jorgerure / jorge.ruiz@ibero.mx
+* Oscar Elton: @OscarElton88 / oscar.elton@datacivica.org
+
+<!-- done -->

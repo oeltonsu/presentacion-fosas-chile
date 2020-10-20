@@ -31,7 +31,7 @@ pacman::p_load(tidyverse, kableExtra, tufte, png, grid, gridExtra, gganimate, he
 
 # Primero que nada, un poco de contexto
 
-México está atravesando por una crisis de derechos humanos, como consecuencia del uso de las fuerzas armadas para llevar acabo labores de seguridad pública.
+México está atravesando por una crisis de derechos humanos, como consecuencia del uso de las fuerzas armadas para llevar a cabo labores de seguridad pública.
 
 * Sexenio de Felipe Calderón Hinojosa (2006 - 2012)
 * Sexenio de Enrique Peña Nieto (2012 - 2018)
@@ -40,9 +40,9 @@ México está atravesando por una crisis de derechos humanos, como consecuencia 
 # Desapariciones generalizadas
 
  > "El Comité lamenta profundamente que se mantiene una situación de desapariciones generalizadas en gran parte del territorio del Estado parte y que imperen la impunidad y la revictimización"
- `r tufte::quote_footer('CED/C/MEX/CO/1 parr.10, Comité CED de Naciones Unidas')`
+ `r tufte::quote_footer('Comité CED de Naciones Unidas, 2018')`
 
-Según los datos oficiales, actualmente en México hay **77 mil 375 personas desaparecidas**
+Según los datos oficiales, actualmente en México hay **77 mil 375 personas desaparecidas**.
 
 Más del 95% de los casos son posteriores a 2007.
 
@@ -50,7 +50,7 @@ Más del 95% de los casos son posteriores a 2007.
 
 Queremos responder una pregunta: **¿dónde buscar?**
 
-En México, quienes buscan a las personas desaparecidas sus mismos familiares.
+En México, quienes buscan a las personas desaparecidas son sus mismos familiares.
 
 Creemos que esta herramienta puede fortalecer los procesos de incidencia de colectivas de familiares en búsqueda en diferentes entidades de México, así como apoyar las labores de búsqueda de personas desaparecidas de autoridades federales y estatales.
 
@@ -59,7 +59,7 @@ Creemos que esta herramienta puede fortalecer los procesos de incidencia de cole
 
 Partimos de la premisa de que las fosas que han sido observadas en el país son solo una fracción del universo de fosas clandestinas (porque además se encuentran fosas casi a diario).
 
-¿Podemos encontrar el resto? ¿Conocer el universo entero de fosas en México?
+¿Podemos conocer el universo entero de fosas en México?
 
 No sabemos, pero esto es un pasito más para acercarnos a él. Queremos, a grandes razgos, clasificar nuestros municipios en municipios donde puede haber fosas clandestinas y municipios donde no.
 
@@ -82,7 +82,7 @@ knitr::include_graphics(here("write/input/arbol-decision.png"))
 ```
 
 # ¿Cómo funciona el modelo?
-Bien, pues el un _random forest_ no es más que la combinación de un montón de árboles de decisión
+Bien, pues el un _random forest_ no es más que la combinación de muchos árboles de decisión
 
 ```{r , echo=FALSE, out.width = '100%', fig.align='center'}
 knitr::include_graphics(here("write/input/random-forest.png"))
@@ -97,11 +97,11 @@ Datos generales:
 * Tenemos en total entonces estimaciones realizadas con 20 modelos: __10__ años * __2__ fuentes 
 
 # ¿Cómo funciona el modelo?
-El primer paso, a manita clasificamos los municipios en tres categorías conforme a la variable dependiente: 
+El primer paso, clasificamos los municipios en tres categorías conforme a la variable dependiente (de forma manual): 
 
 **1** = municipios que tuvieron observaciones de fosas por alguna de las fuentes entre 2009 y 2018.
 
-**0** = municipios donde -dado un anaísis de contexto- consideramos poco posibleque existan fosas clandestinas.
+**0** = municipios donde -dado un análisis de contexto- consideramos poco posible que existan fosas clandestinas.
 
 **-1** = municipios donde no conocemos la respuesta. _Estos son los que nos interesan_.
 
@@ -117,7 +117,7 @@ Dadas esas características, los árboles votan.
 OJO: vamos a identificar sólo fosas con las características de las fosas que _ya han sido observadas antes_.
 
 # ¿Y los sesgos?
-WARNING: usar datos != ser objetivos
+WARNING: usar datos NO ES IGUAL (!=) a ser objetivos
 
 Los procesos de generación de datos importan mucho.
 
@@ -179,7 +179,7 @@ Buscamos que sirva para la implementación de programas contemplados en la _Ley 
 
 - Obtener más datos de fosas y más datos para nuestros predictores. 
 - Trabajar en los _ceros_ del modelo. 
-- Mejor la desagregación geográfica de las predicciones del modelo. 
+- Mejorar la desagregación geográfica de las predicciones del modelo. 
 
 --- 
 
